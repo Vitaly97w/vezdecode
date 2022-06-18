@@ -38,5 +38,5 @@ volumes:
   mongodb_api:
 
 networks:
-  sc-network:
+  vc-network:
     driver: bridge

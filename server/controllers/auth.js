@@ -37,22 +37,28 @@ module.exports.auth = async function (req, res) {
 }
 module.exports.reg = async function (req, res) {
   let email = req.body.email.toLowerCase()
-  const cand = new Users({
-    surName: req.body.surname,
-    name: req.body.name,
-    email: email,
-    password: req.body.password,
-    role: req.body.role,
-    isFirstAuth: true,
-    about: {}
-  })
-  await cand.save()
-  res.status(200).send("ok")
+  const findcand = await Users.find({email: email})
+  if(findcand.length == 0){
+    const cand = new Users({
+      surName: req.body.surname,
+      name: req.body.name,
+      email: email,
+      password: req.body.password,
+      role: req.body.role,
+      isFirstAuth: true,
+      about: {}
+    })
+    await cand.save()
+    res.status(200).send("ok")
+  }
+  else{
+    res.status(409).send('no')
+
+  }
 }
 module.exports.about = async function (req, res) {
-  console.log(req.body.user)
   let email = req.body.user.email.toLowerCase()
-  let cand = await Users.updateOne({_id: req.body.user.id},{$set:{
+  await Users.updateOne({_id: req.body.user.id},{$set:{
     email: email,
     about: req.body.about,
     isFirstAuth: false
