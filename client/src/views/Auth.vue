@@ -39,6 +39,7 @@
         >Регистрация</router-link
       >
     </div>
+   
   </div>
 </template>
 
@@ -66,7 +67,9 @@ export default {
       this.$cookie.delete("token");
       const res = API.login(this.user);
       res.then((data) => {
-        localStorage.setItem("token", data.token);
+        if(data.status == 200){
+         
+        localStorage.setItem("token", data.data.token);
         let user = jwt.decode(localStorage.token.replace("Bearer ", ""));
         if (this.rem) {
           this.$cookie.set("token", localStorage.token),
@@ -77,7 +80,7 @@ export default {
         else {
           if (user.role == "user") this.$router.push({ name: "User" });
           else if (user.role == "admin") this.$router.push({ name: "Admin" });
-        }
+        }}
       });
     },
   },

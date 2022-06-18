@@ -2,7 +2,7 @@ import axios from "axios"
 export default class API {
   static async login(user) {
     const res = await axios.post("/auth", user);
-    return res.data;
+    return res;
   }
 
     static async reg(user) {
