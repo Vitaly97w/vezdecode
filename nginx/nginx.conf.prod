@@ -1,0 +1,29 @@
+server{
+  listen 80 default_server;
+  server_name ${IP_ADDR};
+  return 301 https://$host$request_uri;
+}
+
+server{
+  listen 80;
+  server_name 94.103.91.195;
+
+  
+  client_max_body_size 500M;
+
+  location / {
+    proxy_pass http://client:3000;
+  }
+  location /api {
+    proxy_pass http://api:3002;
+    rewrite ^/api/(.*) /$1 break;
+  }
+
+  location /downloads {
+    access_log off;
+    proxy_pass http://api:3002;
+    rewrite ^/(.*) /$1 break;
+  }
+
+}
+
