@@ -58,30 +58,32 @@ export default {
       rem: false,
     };
   },
+  beforeMount() {
+    delete localStorage.token
+  },
   methods: {
     login() {
-      delete localStorage.token;
-      this.$cookie;
-      this.$cookie.delete("role");
-      this.$cookie.delete("isFirstAuth");
-      this.$cookie.delete("token");
-      const res = API.login(this.user);
+      this.$cookie
+      this.$cookie.delete("role")
+      this.$cookie.delete("isFirstAuth")
+      this.$cookie.delete("token")
+      const res = API.login(this.user)
       res.then((data) => {
         if(data.status == 200){
          
         localStorage.setItem("token", data.data.token);
-        let user = jwt.decode(localStorage.token.replace("Bearer ", ""));
+        let user = jwt.decode(localStorage.token.replace("Bearer ", ""))
         if (this.rem) {
           this.$cookie.set("token", localStorage.token),
             this.$cookie.set("role", user.role),
-            this.$cookie.set("isFirstAuth", user.isFirstAuth);
+            this.$cookie.set("isFirstAuth", user.isFirstAuth)
         }
-        if (user.isFirstAuth) this.$router.push({ name: "About" });
+        if (user.isFirstAuth) this.$router.push({ name: "About" })
         else {
-          if (user.role == "user") this.$router.push({ name: "User" });
-          else if (user.role == "admin") this.$router.push({ name: "Admin" });
+          if (user.role == "user") this.$router.push({ name: "User" })
+          else if (user.role == "admin") this.$router.push({ name: "Admin" })
         }}
-      });
+      })
     },
   },
 };

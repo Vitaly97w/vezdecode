@@ -6,7 +6,15 @@ import Reg from '../views/Reg'
 import User from '../views/User'
 import Admin from '../views/Admin'
 import About from '../views/About'
-
+//Защита роутев
+const security = (to, from, next) => {
+  console.log(localStorage.token)
+  if (localStorage.token) {
+    next()
+  } else {
+    next('/auth')
+  }
+}
 Vue.use(VueRouter)
 
 const routes = [
@@ -32,17 +40,20 @@ const routes = [
   {
     path: '/about',
     name: 'About',
-    component: About
+    component: About,
+    beforeEnter: security,
   },
   {
     path: '/user',
     name: 'User',
-    component: User
+    component: User,
+    beforeEnter: security,
   },
   {
     path: '/admin',
     name: 'Admin',
-    component: Admin
+    component: Admin,
+    beforeEnter: security,
   }
 ]
 
